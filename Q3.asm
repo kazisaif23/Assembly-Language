@@ -1,0 +1,39 @@
+.MODEL SMALL
+.STACK 100H
+.DATA
+    VAL DB ?
+    VAL1 DB 2
+    MSG1 DB 10,13,"THE NUMBER IS ODD $"
+    MSG2 DB 10,13,"THE NUMBER IS EVEN $"
+.CODE
+MAIN PROC
+    MOV AX,@DATA
+    MOV DS,AX
+    
+    MOV AH,01
+    INT 21H
+    MOV VAL,AL
+    MOV AH,0
+    MOV AL,VAL
+    SUB AL,30H
+    
+    DIV VAL1
+    CMP AH,1
+    JE ODD
+    JNE EVEN
+    ODD:
+    MOV AH,09
+    LEA DX,MSG1
+    INT 21H
+    JMP EXIT
+    EVEN:
+    MOV AH,09
+    LEA DX,MSG2
+    INT 21H
+    JMP EXIT
+    
+    EXIT:
+    MOV AH,4CH
+    INT 21H
+    MAIN ENDP
+END MAIN
