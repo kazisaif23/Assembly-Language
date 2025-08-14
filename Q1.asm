@@ -1,0 +1,47 @@
+.MODEL SMALL
+.STACK 100H
+.DATA  
+    TEXT DB "ENTER THE LETTER: $" 
+    TEXT1 DB 10,13,"THE LOWER CASE IS: $"   
+    TEXT2 DB 10,13,"THE UPPER CASE IS: $"
+    VAL DB ?    
+.CODE
+MAIN PROC
+    MOV AX,@DATA
+    MOV DS,AX
+    ; Input
+    MOV AH,09   
+    mov dx, offset TEXT ;ALSO USE ;LEA DX,TEXT
+    INT 21H
+    MOV AH,01
+    INT 21H 
+    MOV VAL,AL
+    
+    CMP VAL,96 ;Compare with ascii value
+    JL TOLOWER ;CONVERT UPPER TO LOWER
+    JG TOUPPER ;CONVERT LOWER TO UPPER
+ 
+    TOLOWER:
+    ADD VAL,32 
+    MOV AH,09
+    LEA DX,TEXT1
+    INT 21H
+    JMP OUTPUT
+   
+    TOUPPER:
+    SUB VAL,32
+    MOV AH,09
+    LEA DX,TEXT2
+    INT 21H
+    JMP OUTPUT
+
+    OUTPUT:
+    MOV AH,02
+    MOV DL,VAL
+    INT 21H
+     
+    ; Return program
+    MOV AH,4CH
+    INT 21H
+    MAIN ENDP
+END MAIN
