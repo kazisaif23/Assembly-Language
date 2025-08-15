@@ -1,0 +1,37 @@
+.MODEL SMALL
+.STACK 100H
+.DATA
+    N1 DB ?
+    N2 DB ?
+    MSG1 DB "ENTER TWO NUMBER: $"
+    MSG2 DB 10,13,"THE SMALLER ONE IS :$"
+.CODE
+MAIN PROC
+    MOV AX,@DATA
+    MOV DS,AX
+    
+    MOV AH,09
+    LEA DX,MSG1
+    INT 21H
+    MOV AH,01
+    INT 21H
+    MOV N1,AL
+    INT 21H
+    MOV N2,AL
+    MOV BL,N1
+    CMP BL,N2
+    JLE SMALLER
+    MOV BL,N2
+    
+    SMALLER:
+    MOV AH,09
+    LEA DX,MSG2
+    INT 21H
+    MOV AH,02
+    MOV DL,BL
+    INT 21H
+    
+    MOV AH,4CH
+    INT 21H
+    MAIN ENDP
+END MAIN
